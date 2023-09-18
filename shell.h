@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 /**
  * This section it my custom prototypes.

@@ -1,61 +1,60 @@
 #include "shell.h"
 
 /**
- * evoke_command - Execute a command and print its exit status.
- * @cmd: The command to execute.
+ * evoke_command - execute command that are parsed by user
+ * @cmd: Users command inputted.
+ *
+ * Return: Nothing since is void.
+
  */
 void evoke_command(const char *cmd)
+
 {
-    pid_t new_pid;
-    char **usr_args;
-    int i;
 
-    usr_args = malloc(128 * sizeof(char *));
-    if (usr_args == NULL)
-    {
-        perror("malloc failed");
-        exit(EXIT_FAILURE);
-    }
+	pid_t new_pid; /*child process or PID*/
 
-    new_pid = fork();
+	int i; /*index for user arguments*/
 
-    if (new_pid < 0)
-    {
-        perror("fork failed");
-        free(usr_args);
-        exit(EXIT_FAILURE);
-    }
+	new_pid = fork();
 
-    if (new_pid == 0)
-    {
-        if (execv("/bin/echo", usr_args) == -1)
-        {
-            perror("execv failed");
-            free(usr_args);
-            exit(EXIT_FAILURE);
-        }
-    }
-    else
-    {
-        int status;
-        waitpid(new_pid, &status, 0);
+	if (new_pid == 0)
 
-        if (WIFEXITED(status))
-        {
-            print_txt("Child exited with status %d\n", WEXITSTATUS(status));
-        }
-        else
-        {
-            print_txt("Child terminated abnormally\n");
-        }
+	{
 
-        free(usr_args);
-    }
+		char usr_args[128]; /*array to handle user args added to commands*/
+
+		char *to_ken;
+
+		to_ken = strtok((char *)cmd, " ");
+
+		for (i = 0; to_ken != NULL; i++)
+
+		{
+
+			usr_args[i] = to_ken;
+
+			to_ken = strtok(NULL, " ");
+
+		}
+
+		usr_args[i] = NULL; /*if user argument is NULL terminate*/
+
+		execvp(usr_args[0], usr_args); /*finally execute users argument*/
+
+		print_txt("Error executing your command\n");
+
+		exit(EXIT_FAILURE);
+	}
+
+		else if (new_pid == -1)
+
+	{
+		print_txt("Error encountered during forking\n")
+		exit(EXIT_FAILURE);
+	}
+		else
+	{
+		wait(NULL);
+		/** this section controls the parent process*/
+	}
 }
-
-int main()
-{
-    evoke_command("/bin/echo");
-    return 0;
-}
-

@@ -42,7 +42,7 @@ void evoke_command(const char *cmd)
 
         if (WIFEXITED(status))
         {
-            print_txt("Child exited with status %d\n", WEXITSTATUS(status));
+            printf("Child exited with status %d\n", WEXITSTATUS(status));
         }
         else
         {
@@ -58,4 +58,3 @@ int main()
     evoke_command("/bin/echo");
     return 0;
 }
-

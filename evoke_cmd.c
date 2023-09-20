@@ -1,43 +1,26 @@
 #include "shell.h"
 
 /**
- * evoke_command - execute command that are parsed by user
- * @cmd: Users command inputted.
+ * evoke_user_command - execute command that are parsed by user
+ * @ur_args: Users command inputted.
  *
  * Return: Nothing since is void.
  */
-void evoke_command(const char *cmd)
+void evoke_user_command(char **ur_args)
 {
-	pid_t new_pid; /*child process or PID*/
-	int i; /*index for user arguments*/
+	char *cmd = NULL;
+	char *cmd_stream;
 
-	new_pid = fork();
-	if (new_pid == 0)
+	if (ur_args)
 	{
-		char *usr_args[128]; /*array to handle user args added to commands*/
-		char *to_ken;
+		/* get the command */
+		cmd = ur_args[0];
+		cmd_stream = usr_cmd_placehold(cmd);
 
-		to_ken = strtok((char *)cmd, " ");
-		for (i = 0; to_ken != NULL; i++)
+		/* execute the command with execve */
+		if (execve(cmd_stream, ur_args, NULL) == -1)
 		{
-			usr_args[i] = to_ken;
-			to_ken = strtok(NULL, " ");
+			perror("Error:");
 		}
-		usr_args[i] = NULL; /*if user argument is NULL terminate*/
-
-		execvp(usr_args[0], usr_args); /*finally execute users argument*/
-		print_txt("Error executing user's commands\n");
-		exit(EXIT_FAILURE);
 	}
-	else if (new_pid == -1)
-	{
-		print_txt("Error encountered during forking\n");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		wait(NULL);
-		/** this section controls the parent process*/
-	}
-
 }

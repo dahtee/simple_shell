@@ -1,24 +1,27 @@
 #ifndef SHELL_H
 #define SHELL_H
+
 /**
- * where is the include files
+ * include - here is the include files
  */
 
 #include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include <stdbool.h>
-#include <sys/wait.h>
+#include <sys/stat.h>
 
 /**
- * This section it my custom prototypes.
+ * prototype - This section it my custom prototypes.
  */
 
-void print_txt(const char *usr_message);
 void show_prmpt(void);
-void evoke_command(const char *cmd);
-void user_input(char *cmd, size_t size_of_str);
+void print_txt(const char *usr_message);
+void evoke_user_command(char **ur_args);
+char *usr_cmd_placehold(char *command);
+
+
 
 #endif

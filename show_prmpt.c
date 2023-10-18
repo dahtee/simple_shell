@@ -7,5 +7,5 @@
 
 void show_prmpt(void)
 {
-	print_txt("van_shell$ ");
+	print_txt("Dahtee$ ");
 }
